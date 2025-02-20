@@ -32,7 +32,7 @@
 $ npm install
 ```
 Ensure that you have a [local Redis service](https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/) installed and running.\
-Ensure that you also have a MySQL database prepared for this project.
+Ensure that you also have a MySQL database prepared for this project.\
 Create a `.env` file in the project directory and define the following properties:
 ```
 DB_HOST=(your database's hostname)
