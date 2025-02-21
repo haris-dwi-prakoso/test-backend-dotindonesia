@@ -68,16 +68,6 @@ export class TodoService {
         // Save todo data to cache if todo exists in database
         await this.cacheManager.set(`todo/${id}`, getTodo, 6000);
       }
-      // else if (id > 0 && id <= 200) {
-      //   // Get todo data from JSONPlaceholder and save to cache and database if id is within the range of 1 to 200
-      //   let response = await firstValueFrom(
-      //     this.httpService.get(`https://jsonplaceholder.typicode.com/todos/${id}`)
-      //   );
-      //   let createTodo = await this.todoRepository.create(response.data);
-      //   let savedTodo = await this.todoRepository.save(createTodo);
-      //   await this.cacheManager.set(`todo/${id}`, savedTodo, 6000);
-      //   return savedTodo;
-      // }
       return getTodo;
     }
   }

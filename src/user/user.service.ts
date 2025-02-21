@@ -68,16 +68,6 @@ export class UserService {
         // Save user data to cache if user exists in database
         await this.cacheManager.set(`user/${id}`, getUser, 6000);
       }
-      // else if (id > 0 && id <= 10) {
-      //   // Get user data from JSONPlaceholder and save to cache and database if id is within the range of 1 to 10
-      //   let response = await firstValueFrom(
-      //     this.httpService.get(`https://jsonplaceholder.typicode.com/users/${id}`)
-      //   );
-      //   let createUser = await this.userRepository.create(response.data);
-      //   let savedUser = await this.userRepository.save(createUser);
-      //   await this.cacheManager.set(`user/${id}`, savedUser, 6000);
-      //   return savedUser;
-      // }
       return getUser;
     }
   }
@@ -97,18 +87,6 @@ export class UserService {
         // Save todos data to cache if todos exists in database
         await this.cacheManager.set(`user/${id}/todos`, getTodos, 6000);
       }
-      // else if (getUser && id > 0 && id <= 10) {
-      //   // Get todos data from JSONPlaceholder and save to cache and database if id is within the range of 1 to 10
-      //   let response = await firstValueFrom(
-      //     this.httpService.get(`https://jsonplaceholder.typicode.com/users/${id}/todos`)
-      //   );
-      //   // Save todos data to cache
-      //   await this.cacheManager.set(`user/${id}/todos`, response.data, 6000);
-      //   // Save todos to user
-      //   getUser.todos = response.data;
-      //   await this.userRepository.save(getUser);
-      //   return response.data;
-      // }
       return getTodos ? getTodos : null;
     }
   }
