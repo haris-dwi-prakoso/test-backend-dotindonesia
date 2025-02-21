@@ -57,7 +57,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 It is highly recommended to hit `GET http://localhost:${PORT}/users` and `GET http://localhost:${PORT}/todos` first to initialize the respective databases' contents if they are empty.\
-Below is a list of paths currently registered within this application:\
+Below is a list of paths currently registered within this application:
 ### /users
 ```
 GET / get list of all users
