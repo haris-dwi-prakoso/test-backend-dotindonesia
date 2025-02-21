@@ -43,6 +43,9 @@ export class UserService {
           this.httpService.get(`https://jsonplaceholder.typicode.com/users`)
         );
         await this.cacheManager.set('user/all', response.data, 6000);
+        for (let i = 0; i < response.data.length; i++) {
+          await this.cacheManager.set(`user/${response.data[i].id}`, response.data[i], 6000);
+        }
         let createUsers = await this.userRepository.create(response.data);
         await this.userRepository.insert(createUsers);
         return response.data;
@@ -64,17 +67,49 @@ export class UserService {
       if (getUser) {
         // Save user data to cache if user exists in database
         await this.cacheManager.set(`user/${id}`, getUser, 6000);
-      } else if (id > 0 && id <= 10) {
-        // Get user data from JSONPlaceholder and save to cache and database if id is within the range of 1 to 10
-        let response = await firstValueFrom(
-          this.httpService.get(`https://jsonplaceholder.typicode.com/users/${id}`)
-        );
-        let createUser = await this.userRepository.create(response.data);
-        let savedUser = await this.userRepository.save(createUser);
-        await this.cacheManager.set(`user/${id}`, savedUser, 6000);
-        return savedUser;
       }
+      // else if (id > 0 && id <= 10) {
+      //   // Get user data from JSONPlaceholder and save to cache and database if id is within the range of 1 to 10
+      //   let response = await firstValueFrom(
+      //     this.httpService.get(`https://jsonplaceholder.typicode.com/users/${id}`)
+      //   );
+      //   let createUser = await this.userRepository.create(response.data);
+      //   let savedUser = await this.userRepository.save(createUser);
+      //   await this.cacheManager.set(`user/${id}`, savedUser, 6000);
+      //   return savedUser;
+      // }
       return getUser;
+    }
+  }
+
+  async findUserTodos(id: number) {
+    // Check if user data exists in cache
+    const cacheValue = await this.cacheManager.get(`user/${id}/todos`);
+    if (cacheValue) return cacheValue;
+    else {
+      // Get user todos from database
+      let getUser = await this.userRepository.findOne({
+        where: { id: id },
+        relations: ['todos']
+      });
+      let getTodos = getUser?.todos;
+      if (getTodos && getTodos.length > 0) {
+        // Save todos data to cache if todos exists in database
+        await this.cacheManager.set(`user/${id}/todos`, getTodos, 6000);
+      }
+      // else if (getUser && id > 0 && id <= 10) {
+      //   // Get todos data from JSONPlaceholder and save to cache and database if id is within the range of 1 to 10
+      //   let response = await firstValueFrom(
+      //     this.httpService.get(`https://jsonplaceholder.typicode.com/users/${id}/todos`)
+      //   );
+      //   // Save todos data to cache
+      //   await this.cacheManager.set(`user/${id}/todos`, response.data, 6000);
+      //   // Save todos to user
+      //   getUser.todos = response.data;
+      //   await this.userRepository.save(getUser);
+      //   return response.data;
+      // }
+      return getTodos ? getTodos : null;
     }
   }
 
@@ -84,12 +119,19 @@ export class UserService {
     let saveUser = await this.userRepository.save(updateData);
     // Save user data to cache
     await this.cacheManager.set(`user/${saveUser.id}`, saveUser, 6000);
+    // Update list of users in cache
+    let allUsers = await this.userRepository.find();
+    await this.cacheManager.set('user/all', allUsers, 6000);
     return saveUser;
   }
 
   async remove(id: number) {
-    // Wipe user data from cache
+    // Wipe user data from cache and database
     await this.cacheManager.del(`user/${id}`);
-    return await this.userRepository.delete(id);
+    let deleteResult = await this.userRepository.delete(id);
+    // Update list of users in cache
+    let allUsers = await this.userRepository.find();
+    await this.cacheManager.set('user/all', allUsers, 6000);
+    return deleteResult;
   }
 }

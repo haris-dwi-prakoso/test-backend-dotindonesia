@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Todo } from 'src/todo/entities/todo.entity';
 
 @Entity('user')
 export class User {
@@ -38,4 +39,7 @@ export class User {
         catchPhrase: string;
         bs: string;
     };
+
+    @OneToMany(() => Todo, todo => todo.user, { cascade: true })
+    todos: Todo[]
 }

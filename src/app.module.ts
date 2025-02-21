@@ -8,6 +8,7 @@ import { Keyv } from 'keyv';
 import { CacheableMemory } from 'cacheable';
 import { UserModule } from './user/user.module';
 import { DatabaseModule } from './database/database.module';
+import { TodoModule } from './todo/todo.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { DatabaseModule } from './database/database.module';
       },
     }),
     UserModule,
-    DatabaseModule
+    DatabaseModule,
+    TodoModule
   ],
   controllers: [AppController],
   providers: [AppService],

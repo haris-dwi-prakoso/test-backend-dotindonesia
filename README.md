@@ -40,6 +40,7 @@ DB_PORT=(your database's port)
 DB_USER=(username for logging into your database)
 DB_PASS=(password for logging into your database)
 DB_SCHEMA=(the name of the schema you intend to use for this project)
+PORT=(optional, the port you wish to assign this application to)
 ```
 An example has been provided in `.env.example`.
 
@@ -54,6 +55,27 @@ $ npm run start:dev
 
 # production mode
 $ npm run start:prod
+```
+It is highly recommended to hit `GET http://localhost:${PORT}/users` and `GET http://localhost:${PORT}/todos` first to initialize the respective databases' contents if they are empty.\
+Below is a list of paths currently registered within this application:\
+### /users
+```
+GET / get list of all users
+POST / create new user
+GET /:id get the user registered under the specified id
+GET /:id/todos get todo items with its userId matching the specified id
+PUT /:id update the user registered under the specified id
+PATCH /:id update the user registered under the specified id
+DELETE /:id delete the user registered under the specified id
+```
+### /todos
+```
+GET / get list of all todo items
+POST / create new todo item
+GET /:id get the todo item registered under the specified id
+PUT /:id update todo item registered under the specified id
+PATCH /:id update todo item registered under the specified id
+DELETE /:id delete todo item registered under the specified id
 ```
 
 ## Run tests
